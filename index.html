@@ -1,0 +1,92 @@
+<html>
+<head>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script type="text/javascript">
+        function getshowgpuinfo_local(index, address) {
+            $.get("http://192.168.0.75:8081/process_get?", { address: address, remote: 'no'}, function (result) {
+                result = JSON.parse(result)
+                console.log(result.data)
+                $("#gpu"+index).html(result.data);
+                $("#name"+index).html(address);
+                setTimeout(getshowgpuinfo_local(index, address), 1000);
+            });
+        }
+        function getshowgpuinfo_remote(index, port) {
+            $.get("http://192.168.0.75:8081/process_get?", { port: port, remote: 'yes'}, function (result) {
+                result = JSON.parse(result)
+                console.log(result.data)
+                $("#gpu"+index).html(result.data);
+                $("#name"+index).html(port);
+                setTimeout(getshowgpuinfo_remote(index, port), 1000);
+            });
+        }
+        function displaygpu() {
+            var gpus = new Array('192.168.0.15',
+                '192.168.0.240',
+                '192.168.0.242',
+                '192.168.0.243')
+            for (i = 0; i < gpus.length; i++) {
+                getshowgpuinfo_local(i, gpus[i])
+            }
+
+            var remote_gpus = new Array('24422',
+                '24522',
+                '24622',
+                '24722')
+            for (i = 0; i < remote_gpus.length; i++) {
+                getshowgpuinfo_remote(i+4, remote_gpus[i])
+            }
+        }
+    </script>
+    <style>
+            pre {font-size:16px;}
+            .wrap{
+                float:left;
+                width:50%;
+            }
+    </style>
+</head>
+
+<body onload="displaygpu()">
+    <div class="wrap">
+        <div>
+            <h2 id='name0'></h2>
+            <pre id="gpu0"></pre>
+        </div>
+        <div>
+            <h2 id='name1'></h2>
+            <pre id="gpu1"></pre>
+        </div>
+        <div>
+            <h2 id='name2'></h2>
+            <pre id="gpu2"></pre>
+        </div>
+        <div>
+            <h2 id='name3'></h2>
+            <pre id="gpu3"></pre>
+        </div>
+    </div>
+    
+    <div class="wrap">
+        <div>
+            <h2 id='name4'></h2>
+            <pre id="gpu4"></pre>
+        </div>
+        <div>
+            <h2 id='name5'></h2>
+            <pre id="gpu5"></pre>
+        </div>
+        <div>
+            <h2 id='name6'></h2>
+            <pre id="gpu6"></pre>
+        </div>
+        <div>
+            <h2 id='name7'></h2>
+            <pre id="gpu7"></pre>
+        </div>
+    </div>
+    
+
+</body>
+
+</html>
